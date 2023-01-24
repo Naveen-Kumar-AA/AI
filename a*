@@ -1,0 +1,48 @@
+def getNextState(state):
+    nextStates = []
+    pos0 = state[0].index(0)
+
+    for i in adjacency[pos0]:
+        nextState = [x for x in state[0]]
+        temp = nextState[i]
+        nextState[i] = 0
+        nextState[pos0] = temp
+        nextStates.append([nextState, state[1] + 1])
+
+    return nextStates
+    
+def aStar(start, end, sortFun):
+    queue = [[start, 0]]
+    visited = []
+    while len(queue) > 0:
+        queue = sorted(queue, key = sortFun)
+        print("Queue:", queue)
+        print("Visited Nodes:", visited)
+        print()
+        n = queue[0]
+        del queue[0]
+        visited.append(n[0])
+        nextStates = getNextState(n)
+        for state in nextStates:
+            if listEqual(state[0], end):
+                print("End State:", state[0])
+                print("Number of states visited:", len(visited))
+                return True
+            if state[0] not in visited:
+                queue.append(state)
+    return False
+
+start = [1, 0, 4, 3, 5, 2, 6, 7, 8]
+end = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+adjacency = {
+             0: [1, 3], 
+             1: [0, 2, 4], 
+             2: [1, 5], 
+             3: [0, 4, 6], 
+             4: [1, 3, 5, 7], 
+             5: [2, 4, 6], 
+             6: [5, 7], 
+             7: [4, 6, 8], 
+             8: [5, 7]
+            }
